@@ -72,6 +72,7 @@
 #define MMC_CMD_ALL_SEND_CID		2
 #define MMC_CMD_SET_RELATIVE_ADDR	3
 #define MMC_CMD_SET_DSR			4
+#define MMC_CMD_SLEEP_AWAKE		5
 #define MMC_CMD_SWITCH			6
 #define MMC_CMD_SELECT_CARD		7
 #define MMC_CMD_SEND_EXT_CSD		8
@@ -108,6 +109,7 @@
 #define SD_CMD_ERASE_WR_BLK_END		33
 #define SD_CMD_APP_SEND_OP_COND		41
 #define SD_CMD_APP_SEND_SCR		51
+#define SD_CMD_IO_RW_DIRECT		52
 
 /* SCR definitions in different words */
 #define SD_HIGHSPEED_BUSY	0x00020000

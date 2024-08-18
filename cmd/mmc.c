@@ -9,6 +9,7 @@
 #include <command.h>
 #include <console.h>
 #include <mmc.h>
+#include <memalign.h>
 
 static int curr_device = -1;
 
@@ -116,6 +117,35 @@ static int do_mmcinfo(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 
 	print_mmcinfo(mmc);
 	return CMD_RET_SUCCESS;
+}
+
+int mmc_send_ext_csd(struct mmc *mmc, u8 *ext_csd);
+static int do_mmcexcsd(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
+{
+        struct mmc *mmc;
+
+        if (curr_device < 0) {
+                if (get_mmc_num() > 0)
+                        curr_device = 0;
+                else {
+                        puts("No MMC device available\n");
+                        return 1;
+                }
+        }
+        mmc = init_mmc_device(curr_device, false);
+        if (!mmc) {
+                return CMD_RET_FAILURE;
+        } else {
+                int err;
+                ALLOC_CACHE_ALIGN_BUFFER(unsigned char, ext_csd, MMC_MAX_BLOCK_LEN);
+                err = mmc_send_ext_csd(mmc, ext_csd);
+                if (err) {
+                        puts("Could not get ext_csd register values\n");
+                        return err;
+                }
+                print_buffer(0, ext_csd, 4, MMC_MAX_BLOCK_LEN/4, DISP_LINE_LEN/4);
+                return CMD_RET_SUCCESS;
+        }
 }
 
 #ifdef CONFIG_SUPPORT_EMMC_RPMB

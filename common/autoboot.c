@@ -215,6 +215,9 @@ static int __abortboot(int bootdelay)
 	int key;
 	unsigned char keycheck = 2;
 
+    // auto key press enter uboot
+    return 1;
+
 #ifdef CONFIG_MENUPROMPT
 	printf(CONFIG_MENUPROMPT);
 #else

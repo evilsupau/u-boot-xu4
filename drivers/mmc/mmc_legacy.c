@@ -14,6 +14,23 @@ static struct list_head mmc_devices;
 static int cur_dev_num = -1;
 
 #if !CONFIG_IS_ENABLED(MMC_TINY)
+struct mmc *find_mmc_device_if(int dev_if)
+{
+    struct mmc *m;
+    struct list_head *entry;
+
+    list_for_each(entry, &mmc_devices) {
+        m = list_entry(entry, struct mmc, link);
+
+        if (m->version & dev_if)
+            return m;
+    }
+
+    printf("MMC Interface %d not found\n", dev_if);
+
+    return NULL;
+}
+
 struct mmc *find_mmc_device(int dev_num)
 {
 	struct mmc *m;
